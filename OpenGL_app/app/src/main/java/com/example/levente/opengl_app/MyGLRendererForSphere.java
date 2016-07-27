@@ -80,8 +80,8 @@ public class MyGLRendererForSphere implements GLSurfaceView.Renderer {
         gl.glTranslatef(0.0f, 0.0f, -3.0f);
 
         mSphere.draw(new Matrix4());
-        plane1.draw();
-        plane2.draw();
+        //plane1.draw();
+        //plane2.draw();
     }
 
     @Override

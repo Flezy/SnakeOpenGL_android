@@ -12,9 +12,10 @@ import java.nio.FloatBuffer;
 public class Triangle {
 
     private final String vertexShaderCode =
+            "uniform mat4 ProjMat;" +
             "attribute vec4 vPosition;" +
                     "void main() {" +
-                    "  gl_Position = vPosition;" +
+                    "  gl_Position = ProjMat * vPosition;" +
                     "}";
 
     private final String fragmentShaderCode =
@@ -46,6 +47,7 @@ public class Triangle {
     private final int vertexCount = triangleCoords.length / COORDS_PER_VERTEX;
     private final int vertexStride = COORDS_PER_VERTEX * 4; // 4 bytes per vertex
 
+    private int mMVPMatrixHandle;
 
     public Triangle(float coords[]){
         triangleCoords = coords;
@@ -82,12 +84,14 @@ public class Triangle {
 
 
     }
-    public void draw(){
+    public void draw(float[] mvpMatrix){
         // Add program to OpenGL ES environment
         GLES20.glUseProgram(mProgram);
 
         // get handle to vertex shader's vPosition member
         mPositionHandle = GLES20.glGetAttribLocation(mProgram, "vPosition");
+        mMVPMatrixHandle = GLES20.glGetUniformLocation(mProgram, "ProjMat");
+        GLES20.glUniformMatrix4fv(mMVPMatrixHandle, 1, false, mvpMatrix, 0);
 
         // Enable a handle to the triangle vertices
         GLES20.glEnableVertexAttribArray(mPositionHandle);
